@@ -1,0 +1,107 @@
+<div class="container">
+    <div class="container-fluid text-center pb-5">
+        <div style="text-align:center">
+          <h1>
+            Welcome to {{title}}!
+          </h1>
+        </div>
+      </div>
+      <div class="row">
+      <div  class="col-xs-6">
+        <div>
+      <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate>
+<div class="form-group">
+      <label for="NoteType">Note Type</label>
+      <select #NoteType (change)="update($event)" class="form-control" [(ngModel)]="form.NoteType" name="NoteType">
+        <option value="default">----</option>
+        <option *ngFor="let item of typeList" [value]="item.typeId">
+            {{item.typeName}}
+        </option>
+    </select>
+</div>
+<div class="form-group">
+        <label for="NoteContent">Note Content</label>
+        <input
+          type="text"
+          class="form-control"
+          name="NoteContent"
+          maxlength=100
+          [(ngModel)]="form.NoteContent"
+          required
+          #NoteContent="ngModel"
+        />
+      </div>
+      <div *ngIf="selected==2" class="form-group">
+        <label for="ReminderTimeDate">Reminder Date & Time</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          name="ReminderTimeDate"
+          [(ngModel)]="form.ReminderTimeDate"
+          required
+          #ReminderTimeDate="ngModel"
+        />
+      </div>
+      <div *ngIf="selected==3" class="form-group">
+        <label for="IsComplete">Is Complete</label>
+        <select #IsComplete (change)="ChangeIsComplete($event)" class="form-control" [(ngModel)]="yesNoSelected" name="IsComplete">
+          <option value="default">----</option>
+          <option *ngFor="let item of yesNoDropDown" [value]="item.key">
+              {{item.value}}
+          </option>
+      </select>
+      </div>
+      <div *ngIf="selected==3 && yesNoSelected=='N'" class="form-group">
+        <label for="DueTimeDate">DueDate Date & Time</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          name="DueTimeDate"
+          [(ngModel)]="form.DueTimeDate"
+          required
+          #DueTimeDate="ngModel"
+        />
+      </div>
+      <button *ngIf="form.noteId==null" class="btn btn-primary btn-block">
+            save
+          </button>
+          <button *ngIf="form.noteId!=null" class="btn btn-primary btn-block">
+              update
+            </button>
+        </form>
+      </div>
+      </div>
+      <hr>
+      <div  class="col-xs-6">
+        <div >
+            <table class="table table-bordered ">
+              <tr>
+                <th>Type</th>
+                <th>Content</th>
+                <th>Created Date</th>
+                <th>Reminder Date & Time</th>
+                <th>Is Complete</th>
+                <th>Due Date & Time</th>
+              </tr>
+                <tr *ngFor="let item of noteList">
+                <td *ngIf="item.noteType==1" (click)="populateForm(item)">Regular</td>
+                <td *ngIf="item.noteType==2" (click)="populateForm(item)">Reminder</td>
+                <td *ngIf="item.noteType==3" (click)="populateForm(item)">Todo</td>
+                <td *ngIf="item.noteType==4" (click)="populateForm(item)">Bookmark</td>
+                <td (click)="populateForm(item)">{{item.noteContent}}</td>
+                <td (click)="populateForm(item)">{{item.noteDate | date}}</td>
+                <td (click)="populateForm(item)">{{item.reminderTimeDate | date:'medium'}}</td>
+                <td (click)="populateForm(item)">{{item.isComplete}}</td>
+                <td (click)="populateForm(item)">{{item.dueTimeDate | date:'medium'}}</td>
+                <td><button (click)="onDelete(item.noteId)" class="btn btn-sm btn-outline-danger">X</button></td>
+                </tr>
+                </table>
+        </div>
+        </div>
+      </div>
+  </div>
+  
